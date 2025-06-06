@@ -16,6 +16,9 @@ function multiply(a , b){
 }
 
 function divide(a , b) {
+    if (b === 0) {
+        return 'Undefined';
+    }
     return a / b;
 }
 
@@ -27,23 +30,19 @@ app.get('/calculate', (req, res) => {
     if (isNaN(num1) || isNaN(num2)) {
         return res.status(400).send('Error: They need to be numbers.');
     }
-
-    let result;
+    let result
     switch (operation) {
         case 'add':
-            add(num1, num2);
+            result= add(num1, num2);
             break;
         case 'sub':
-            subtract(num1, num2);
+            result= subtract(num1, num2);
             break;
         case 'mult':
-            multiply(num1, num2);
+            result= multiply(num1, num2);
             break;
         case 'div':
-            if (num2 === 0) {
-                return res.status(400).send('Error: Cannot divide by zero.');
-            }
-            divide(num1, num2);
+            result= divide(num1, num2);
             break;
         default:
             return res.status(400).send('Error: Invalid operation.');
@@ -55,3 +54,5 @@ app.get('/calculate', (req, res) => {
 app.listen(port, () => {
     console.log(`Calculator API is running at http://localhost:${port}`);
 });
+
+module.exports = { add, subtract, multiply, divide, app };
