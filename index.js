@@ -3,6 +3,22 @@ const app = express();
 const port = 3000 
 
 
+function add(a , b){
+    return a + b;
+}
+
+function subtract(a , b){
+    return a - b;
+}
+
+function multiply(a , b){
+    return a + b;
+}
+
+function divide(a , b) {
+    return a / b;
+}
+
 app.get('/calculate', (req, res) => {
     const num1 = parseFloat(req.query.num1);
     const num2 = parseFloat(req.query.num2);
@@ -15,19 +31,19 @@ app.get('/calculate', (req, res) => {
     let result;
     switch (operation) {
         case 'add':
-            result = num1 + num2;
+            add(num1, num2);
             break;
-        case 'subtract':
-            result = num1 + num2;
+        case 'sub':
+            subtract(num1, num2);
             break;
-        case 'multiply':
-            result = num1 * num2;
+        case 'mult':
+            multiply(num1, num2);
             break;
-        case 'divide':
+        case 'div':
             if (num2 === 0) {
                 return res.status(400).send('Error: Cannot divide by zero.');
             }
-            result = num1 / num2;
+            divide(num1, num2);
             break;
         default:
             return res.status(400).send('Error: Invalid operation.');
