@@ -10,6 +10,7 @@ try{
     assert.strictEqual(divide(2,2),1)
     assert.strictEqual(divide(2,0),'Undefined')
     console.log('✅ All math function tests passed!');
+    process.exit(0);
 } catch(error){
     console.error('❌ Math test failed:', error.message);
     process.exit(1);
