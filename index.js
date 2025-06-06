@@ -1,6 +1,7 @@
 const express = require('express');
 const app = express();
-const port = 3000;
+const port = process.env.PORT || 4000 
+
 
 app.get('/calculate', (req, res) => {
     const num1 = parseFloat(req.query.num1);
