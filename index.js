@@ -18,7 +18,7 @@ app.get('/calculate', (req, res) => {
             result = num1 + num2;
             break;
         case 'subtract':
-            result = num1 + num2;
+            result = num1 - num2;
             break;
         case 'multiply':
             result = num1 * num2;
