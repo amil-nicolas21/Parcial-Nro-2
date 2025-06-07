@@ -29,6 +29,7 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
+      - uses: actions/checkout@v3
       - name: Trigger Render Deploy Hook
         run: |
           curl -X POST https://api.render.com/deploy/srv-d113hjqli9vc738bsmf0?key=dTKMpUYYkPY
