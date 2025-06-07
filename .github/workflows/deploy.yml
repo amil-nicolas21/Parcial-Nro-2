@@ -35,7 +35,7 @@ jobs:
             echo "test_result=$TEST_EXIT_CODE" >> $GITHUB_OUTPUT
             exit $TEST_EXIT_CODE
 
-      - name: Notify Slack - Test Result
+      - name: Notify Test in Slack
         if: always()
         run: |
                 if [ "${{ steps.test_step.outputs.test_result }}" -eq 0 ]; then
