@@ -15,7 +15,7 @@ function runTest(name, testFunc) {
 runTest('Adding', () => assert.strictEqual(add(1, 2), 3));
 runTest('Subtracting', () => assert.strictEqual(subtract(2, 1), 1));
 runTest('Multiplying', () => assert.strictEqual(multiply(3, 2), 6));
-runTest('Dividing', () => assert.strictEqual(divide(2, 2), 1));
-runTest('Dividing by Zero"', () => assert.strictEqual(divide(2, 0), 'Undefined'));
+runTest('Dividing', () => assert.strictEqual(divide(36, 6), 6));
+runTest('Dividing by Zero"', () => assert.strictEqual(divide(679, 0), 'Undefined'));
 
 
