@@ -37,8 +37,12 @@ jobs:
       - name: Extract Jira issue key from commit message
         id: extract_jira
         run: |
-          echo "MESSAGE=$(git log -1 --pretty=%B)" >> $GITHUB_ENV
-          ISSUE_KEY=$(echo "$MESSAGE" | grep -oE '[A-Z]+-[0-9]+' | head -n 1)
+          COMMIT_MESSAGE=$(git log -1 --pretty=%B)
+          echo "Commit message: $COMMIT_MESSAGE"
+          
+          ISSUE_KEY=$(echo "$COMMIT_MESSAGE" | grep -oE '[A-Z]+-[0-9]+' | head -n 1)
+          echo "Extracted ISSUE_KEY: $ISSUE_KEY"
+          
           echo "ISSUE_KEY=$ISSUE_KEY" >> $GITHUB_ENV
 
       - name: Move Jira task to "Listo"
