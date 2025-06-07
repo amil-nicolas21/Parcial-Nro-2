@@ -36,12 +36,12 @@ jobs:
       - name: Move Jira task to "Done"
         run: |
           curl --request POST \
-            --url https://parcial-2-ingycalidad.atlassian.net/rest/api/3/issue/SCRUM-4/transitions
+            --url "${{ secrets.JIRA_URL }}/rest/api/3/issue/${{ secrets.JIRA_ISSUE_KEY }}/transitions" \
             --user "${{ secrets.JIRA_EMAIL }}:${{ secrets.JIRA_API_TOKEN }}" \
             --header "Accept: application/json" \
             --header "Content-Type: application/json" \
             --data '{
               "transition": {
-                "id": "31"
+                "id": "'"${{ secrets.JIRA_DONE_ID }}"'"
               }
             }'
