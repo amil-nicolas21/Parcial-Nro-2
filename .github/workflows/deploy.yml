@@ -35,7 +35,7 @@ jobs:
           curl -X POST https://api.render.com/deploy/srv-d113hjqli9vc738bsmf0?key=dTKMpUYYkPY
 
 
-      - name: Move Jira task to "Listo"
+      - name: Move Jira task to "Done"
         run: |
           curl --request POST \
             --url "${{ secrets.JIRA_URL }}/rest/api/3/issue/SCRUM-4/transitions" \
