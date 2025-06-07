@@ -43,7 +43,7 @@ jobs:
       - name: Move Jira task to "Listo"
         run: |
           curl --request POST \
-            --url "${{ secrets.JIRA_URL }}/rest/api/3/issue/${{ env.ISSUE_KEY }}/transitions" \
+            --url "${{ secrets.JIRA_URL }}/rest/api/3/issue/${{ ISSUE_KEY }}/transitions" \
             --user "${{ secrets.JIRA_EMAIL }}:${{ secrets.JIRA_API_TOKEN }}" \
             --header "Accept: application/json" \
             --header "Content-Type: application/json" \
