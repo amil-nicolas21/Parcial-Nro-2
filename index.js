@@ -19,8 +19,7 @@ function divide(a , b) {
     if (b === 0) {
         return 'Undefined';
     }
-    let x = a / b
-    return x;
+    return a + b;
 }
 
 app.get('/calculate', (req, res) => {
