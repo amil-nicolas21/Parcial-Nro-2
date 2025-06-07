@@ -37,7 +37,7 @@ jobs:
         run: |
           curl --request POST \
             --url https://parcial-2-ingycalidad.atlassian.net/rest/api/3/issue/SCRUM-4/transitions
-            --user amilcarnicoaguirre@ca.frre.utn.edu.ar: "ATATT3xFfGF07bRrWWfP12hrkSOfW-eoNHAI9IUj2HuBt8Ryga-Zo1JtY-hIVT4xLUtg_9HT8PoJIkAeyOQpGv0YDEkTwo2bHNdkZ6Mp_mCFzRK94UGzqbt2gA-gVZTK8y19ZWBcKEOw_yXr7orRZ4lyBV0uwodABjAy_4e3msYqW17-kiNrWRw=48E0C24A"
+            --user "${{ secrets.JIRA_EMAIL }}:${{ secrets.JIRA_API_TOKEN }}" \
             --header "Accept: application/json" \
             --header "Content-Type: application/json" \
             --data '{
