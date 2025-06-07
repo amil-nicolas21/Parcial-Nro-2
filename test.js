@@ -6,7 +6,7 @@ function runTest(name, testFunc) {
         testFunc();
         console.log(`✅ ${name} works`);
     } catch (e) {
-        console.error(`❌ ${name} failed: ${e.message}`);
+        console.error(`❌ ${name} failed`);
         process.exit(1);
     }
 }
