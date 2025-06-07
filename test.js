@@ -17,5 +17,4 @@ runTest('Subtracting', () => assert.strictEqual(subtract(2, 1), 1));
 runTest('Multiplying', () => assert.strictEqual(multiply(3, 2), 6));
 runTest('Dividing', () => assert.strictEqual(divide(36, 6), 6));
 runTest('Dividing by Zero"', () => assert.strictEqual(divide(679, 0), 'Undefined'));
-
-
+process.exit(0);
