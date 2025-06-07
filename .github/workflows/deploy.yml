@@ -3,36 +3,28 @@ name: Testing
 on:
   push:
     branches:
-      - main  # Change to your branch if different
+      - main
       - develop
       - feature
 
 jobs:
-
   build:
-
     runs-on: ubuntu-latest
+
+    outputs:
+      issue_key: ${{ steps.extract_jira.outputs.issue_key }}
 
     steps:
       - uses: actions/checkout@v4
+
       - name: Use Node.js
         uses: actions/setup-node@v4
         with:
           node-version: '22.x'
+
       - run: npm ci
       - run: npm run build --if-present
       - run: npm test
-
-  deploy:
-    if: github.ref == 'refs/heads/main'
-    needs: build
-    runs-on: ubuntu-latest
-
-    steps:
-      - uses: actions/checkout@v3
-      - name: Trigger Render Deploy Hook
-        run: |
-          curl -X POST https://api.render.com/deploy/srv-d113hjqli9vc738bsmf0?key=dTKMpUYYkPY
 
       - name: Extract Jira issue key from commit message
         id: extract_jira
@@ -43,13 +35,46 @@ jobs:
           ISSUE_KEY=$(echo "$COMMIT_MESSAGE" | grep -oE '[A-Z]+-[0-9]+' | head -n 1)
           echo "Extracted ISSUE_KEY: $ISSUE_KEY"
           
-          echo "ISSUE_KEY=$ISSUE_KEY" >> $GITHUB_ENV
+          echo "issue_key=$ISSUE_KEY" >> $GITHUB_OUTPUT
 
-      - name: Move Jira task to "Listo"
+      - name: Move Jira task to "En Curso"
         run: |
+          ISSUE_KEY="${{ needs.build.outputs.issue_key }}"
+          echo "Transitioning Jira issue: $ISSUE_KEY"
+
+          JSON_PAYLOAD=$(jq -n --arg id "21" '{transition: {id: $id}}')
+
           curl --request POST \
-            --url "${{ secrets.JIRA_URL }}/rest/api/3/issue/${{ env.ISSUE_KEY }}/transitions" \
+            --url "${{ secrets.JIRA_URL }}/rest/api/3/issue/$ISSUE_KEY/transitions" \
             --user "${{ secrets.JIRA_EMAIL }}:${{ secrets.JIRA_API_TOKEN }}" \
             --header "Accept: application/json" \
             --header "Content-Type: application/json" \
-            --data "$(jq -n --arg id "${{ secrets.JIRA_DONE_ID }}" '{transition: {id: $id}}')"
+            --data "$JSON_PAYLOAD"
+      
+
+  deploy:
+    if: github.ref == 'refs/heads/main'
+    needs: build
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Trigger Render Deploy Hook
+        run: |
+          curl -X POST https://api.render.com/deploy/srv-d113hjqli9vc738bsmf0?key=dTKMpUYYkPY
+
+      - name: Move Jira task to "Listo"
+        run: |
+          ISSUE_KEY="${{ needs.build.outputs.issue_key }}"
+          echo "Transitioning Jira issue: $ISSUE_KEY"
+
+          JSON_PAYLOAD=$(jq -n --arg id "${{ secrets.JIRA_DONE_ID }}" '{transition: {id: $id}}')
+
+          curl --request POST \
+            --url "${{ secrets.JIRA_URL }}/rest/api/3/issue/$ISSUE_KEY/transitions" \
+            --user "${{ secrets.JIRA_EMAIL }}:${{ secrets.JIRA_API_TOKEN }}" \
+            --header "Accept: application/json" \
+            --header "Content-Type: application/json" \
+            --data "$JSON_PAYLOAD"
+
