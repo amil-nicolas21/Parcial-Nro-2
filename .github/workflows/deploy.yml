@@ -43,7 +43,7 @@ jobs:
           echo "ISSUE_KEY=$ISSUE_KEY" >> $GITHUB_ENV
           echo "issue_key=$ISSUE_KEY" >> "$GITHUB_OUTPUT"
 
-      - name: Move Jira task to "Listo"
+      - name: Move Jira task to "Done"
         run: |
           curl --request POST \
             --url "${{ secrets.JIRA_URL }}/rest/api/3/issue/SCRUM-4/transitions" \
