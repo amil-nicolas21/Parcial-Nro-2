@@ -24,7 +24,34 @@ jobs:
 
       - run: npm ci
       - run: npm run build --if-present
-      - run: npm test
+
+
+      - name: Run Tests
+        id: test_step
+        run: |
+            set +e
+            npm test
+            TEST_EXIT_CODE=$?
+            echo "test_result=$TEST_EXIT_CODE" >> $GITHUB_OUTPUT
+            exit $TEST_EXIT_CODE
+
+      - name: Notify Slack - Test Result
+        if: always()
+        run: |
+                if [ "${{ steps.test_step.outputs.test_result }}" -eq 0 ]; then
+                  COLOR="#2eb886"
+                  STATUS="✅ Tests Passed"
+                else
+                  COLOR="#e01e5a"
+                  STATUS="❌ Tests Failed"
+                fi
+                
+                curl -X POST -H 'Content-type: application/json' --data "{
+                  \"attachments\": [{
+                    \"color\": \"$COLOR\",
+                    \"text\": \"$STATUS on branch *${{ github.ref_name }}* for commit <https://github.com/${{ github.repository }}/commit/${{ github.sha }}|${{ github.sha }}>\"
+                  }]
+                }" ${{ secrets.SLACK_WEBHOOK_URL }}
 
       - name: Extract Jira issue key from commit message
         id: extract_jira
