@@ -37,14 +37,16 @@ jobs:
       - name: Extract Jira issue key from commit message
         id: extract_jira
         run: |
-          echo "MESSAGE=$(git log -1 --pretty=%B)" >> $GITHUB_ENV
+          MESSAGE=$(git log -1 --pretty=%B)
+          echo "MESSAGE=$MESSAGE" >> $GITHUB_ENV
           ISSUE_KEY=$(echo "$MESSAGE" | grep -oE '[A-Z]+-[0-9]+' | head -n 1)
           echo "ISSUE_KEY=$ISSUE_KEY" >> $GITHUB_ENV
+          echo "issue_key=$ISSUE_KEY" >> "$GITHUB_OUTPUT"
 
       - name: Move Jira task to "Listo"
         run: |
           curl --request POST \
-            --url "${{ secrets.JIRA_URL }}/rest/api/3/issue/${{ env.ISSUE_KEY }}/transitions" \
+            --url "${{ secrets.JIRA_URL }}/rest/api/3/issue/${{ steps.extract_jira.outputs.issue_key }}/transitions" \
             --user "${{ secrets.JIRA_EMAIL }}:${{ secrets.JIRA_API_TOKEN }}" \
             --header "Accept: application/json" \
             --header "Content-Type: application/json" \
