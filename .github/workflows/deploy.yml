@@ -37,16 +37,14 @@ jobs:
       - name: Extract Jira issue key from commit message
         id: extract_jira
         run: |
-          MESSAGE=$(git log -1 --pretty=%B)
-          echo "MESSAGE=$MESSAGE" >> $GITHUB_ENV
+          echo "MESSAGE=$(git log -1 --pretty=%B)" >> $GITHUB_ENV
           ISSUE_KEY=$(echo "$MESSAGE" | grep -oE '[A-Z]+-[0-9]+' | head -n 1)
           echo "ISSUE_KEY=$ISSUE_KEY" >> $GITHUB_ENV
-          echo "issue_key=$ISSUE_KEY" >> "$GITHUB_OUTPUT"
 
-      - name: Move Jira task to "Done"
+      - name: Move Jira task to "Listo"
         run: |
           curl --request POST \
-            --url "${{ secrets.JIRA_URL }}/rest/api/3/issue/SCRUM-4/transitions" \
+            --url "${{ secrets.JIRA_URL }}/rest/api/3/issue/${{ env.ISSUE_KEY }}/transitions" \
             --user "${{ secrets.JIRA_EMAIL }}:${{ secrets.JIRA_API_TOKEN }}" \
             --header "Accept: application/json" \
             --header "Content-Type: application/json" \
@@ -54,4 +52,4 @@ jobs:
               "transition": {
                 "id": "'"${{ secrets.JIRA_DONE_ID }}"'"
               }
-            }'
+            }
