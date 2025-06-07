@@ -38,6 +38,7 @@ jobs:
       - name: Notify Test in Slack
         if: always()
         run: |
+                COMMIT_MESSAGE=$(git log -1 --pretty=%B)
                 if [ "${{ steps.test_step.outputs.test_result }}" -eq 0 ]; then
                   COLOR="#2eb886"
                   STATUS="✅ Tests Passed"
@@ -49,7 +50,7 @@ jobs:
                 curl -X POST -H 'Content-type: application/json' --data "{
                   \"attachments\": [{
                     \"color\": \"$COLOR\",
-                    \"text\": \"$STATUS on branch *${{ github.ref_name }}* for commit <https://github.com/${{ github.repository }}/commit/${{ github.sha }}|${{ github.sha }}>\"
+                    \"text\": \"$STATUS on branch *${{ github.ref_name }}*\nCommit message: *$COMMIT_MESSAGE*\n<https://github.com/${{ github.repository }}/commit/${{ github.sha }}|View commit>\"
                   }]
                 }" ${{ secrets.SLACK_WEBHOOK_URL }}
 
