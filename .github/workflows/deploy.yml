@@ -33,10 +33,10 @@ jobs:
         run: |
           curl -X POST https://api.render.com/deploy/srv-d113hjqli9vc738bsmf0?key=dTKMpUYYkPY
 
-      - name: Move Jira task to "Listo"
+      - name: Move Jira task to "Done"
         run: |
           curl --request POST \
-            --url "${{ secrets.JIRA_URL }}/rest/api/3/issue/${{ secrets.JIRA_ISSUE_KEY }}/transitions" \
+            --url "${{ secrets.JIRA_URL }}/rest/api/3/issue/SCRUM-4/transitions" \
             --user "${{ secrets.JIRA_EMAIL }}:${{ secrets.JIRA_API_TOKEN }}" \
             --header "Accept: application/json" \
             --header "Content-Type: application/json" \
