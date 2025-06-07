@@ -48,8 +48,8 @@ jobs:
             --user "${{ secrets.JIRA_EMAIL }}:${{ secrets.JIRA_API_TOKEN }}" \
             --header "Accept: application/json" \
             --header "Content-Type: application/json" \
-            --data {
+            --data "{
               "transition": {
                 "id": "'"${{ secrets.JIRA_DONE_ID }}"'"
               }
-            }
+            }"
