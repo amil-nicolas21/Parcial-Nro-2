@@ -33,10 +33,17 @@ jobs:
         run: |
           curl -X POST https://api.render.com/deploy/srv-d113hjqli9vc738bsmf0?key=dTKMpUYYkPY
 
+      - name: Extract Jira issue key from commit message
+        id: extract_jira
+        run: |
+          echo "MESSAGE=$(git log -1 --pretty=%B)" >> $GITHUB_ENV
+          ISSUE_KEY=$(echo "$MESSAGE" | grep -oE '[A-Z]+-[0-9]+' | head -n 1)
+          echo "ISSUE_KEY=$ISSUE_KEY" >> $GITHUB_ENV
+
       - name: Move Jira task to "Done"
         run: |
           curl --request POST \
-            --url "${{ secrets.JIRA_URL }}/rest/api/3/issue/SCRUM-4/transitions" \
+            --url "${{ secrets.JIRA_URL }}/rest/api/3/issue/${{ env.ISSUE_KEY }}/transitions" \
             --user "${{ secrets.JIRA_EMAIL }}:${{ secrets.JIRA_API_TOKEN }}" \
             --header "Accept: application/json" \
             --header "Content-Type: application/json" \
