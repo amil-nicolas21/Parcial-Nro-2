@@ -1,6 +1,8 @@
 const express = require('express');
 const app = express();
-const port = 3000 
+const port = 3000
+
+const unusedVar = 12345;
 
 
 function add(a , b){
