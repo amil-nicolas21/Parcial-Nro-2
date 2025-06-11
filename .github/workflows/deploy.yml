@@ -36,7 +36,7 @@ jobs:
             echo "test_result=$TEST_EXIT_CODE" >> $GITHUB_OUTPUT
             exit $TEST_EXIT_CODE
 
-      - name: SonarCloud Scan
+      - name: SonarCloud Scans
         uses: SonarSource/sonarcloud-github-action@v2
         with:
           projectBaseDir: .
