@@ -66,7 +66,7 @@ jobs:
           
           echo "issue_key=$ISSUE_KEY" >> $GITHUB_OUTPUT
 
-      - name: Move Jira task to "Doing"
+      - name: Move Jira task to "En curso"
         run: |
           ISSUE_KEY="${{ needs.build.outputs.issue_key }}"
           echo "Transitioning Jira issue: $ISSUE_KEY"
