@@ -3,9 +3,10 @@ name: Testing
 on:
   push:
     branches:
-      - main
-      - develop
-      - feature
+      - '**'
+  pull_request:
+    branches:
+      - '**'
 
 jobs:
   build:
@@ -34,6 +35,14 @@ jobs:
             TEST_EXIT_CODE=$?
             echo "test_result=$TEST_EXIT_CODE" >> $GITHUB_OUTPUT
             exit $TEST_EXIT_CODE
+
+      - name: SonarCloud Scan
+        uses: SonarSource/sonarcloud-github-action@v2
+        with:
+          projectBaseDir: .
+        env:
+          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+
 
       - name: Notify Test in Slacks
         if: always()
