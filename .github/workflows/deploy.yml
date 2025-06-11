@@ -92,7 +92,7 @@ jobs:
         run: |
           curl -X POST https://api.render.com/deploy/srv-d113hjqli9vc738bsmf0?key=dTKMpUYYkPY
 
-      - name: Move Jira task to "Listo"
+      - name: Move Jira task to "Done"
         run: |
           ISSUE_KEY="${{ needs.build.outputs.issue_key }}"
           echo "Transitioning Jira issue: $ISSUE_KEY"
