@@ -35,7 +35,7 @@ jobs:
             echo "test_result=$TEST_EXIT_CODE" >> $GITHUB_OUTPUT
             exit $TEST_EXIT_CODE
 
-      - name: Notify Test in Slack
+      - name: Notify Test in Slacks
         if: always()
         run: |
                 COMMIT_MESSAGE=$(git log -1 --pretty=%B)
