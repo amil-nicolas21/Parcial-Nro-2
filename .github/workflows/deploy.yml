@@ -66,7 +66,6 @@ jobs:
           
                 if [ "$TEST_RESULT" -eq 0 ] && [ "$QUALITY_GATE_STATUS" = "OK" ]; then
                   COLOR="#2eb886"
-          
                   STATUS="✅ Tests Passed"
                 else
                   COLOR="#e01e5a"
@@ -118,7 +117,38 @@ jobs:
         run: |
           curl -X POST https://api.render.com/deploy/srv-d113hjqli9vc738bsmf0?key=dTKMpUYYkPY
 
+      - name: Wait for Render Deployment to Finish
+        id: wait_render
+        run: |
+          SERVICE_ID="srv-d113hjqli9vc738bsmf0"
+          API_KEY="dTKMpUYYkPY"  # O mejor, usar secrets
+          SLEEP_TIME=15
+
+          echo "⏳ Waiting for Render deployment to finish..."
+
+          while true; do
+            STATUS=$(curl -s -H "Authorization: Bearer $API_KEY" \
+            https://api.render.com/v1/services/$SERVICE_ID/deploys | jq -r '.[0].status')
+
+          echo "Current deployment status: $STATUS"
+
+          if [[ "$STATUS" == "live" ]]; then
+            echo "✅ Deployment completed successfully"
+            echo "render_success=true" >> $GITHUB_OUTPUT
+            exit 0
+          elif [[ "$STATUS" == "failed" || "$STATUS" == "cancelled" ]]; then
+            echo "❌ Deployment failed or was cancelled"
+            echo "render_success=false" >> $GITHUB_OUTPUT
+            exit 1
+          fi
+
+          sleep $SLEEP_TIME
+          done
+
+
+
       - name: Move Jira task to "Done"
+        if: steps.wait_render.outputs.render_success == 'true'
         run: |
           ISSUE_KEY="${{ needs.build.outputs.issue_key }}"
           echo "Transitioning Jira issue: $ISSUE_KEY"

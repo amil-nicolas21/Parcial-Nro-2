@@ -2,8 +2,6 @@ const express = require('express');
 const app = express();
 const port = 3000
 
-const boy = 123445678;
-cons idk = 1234565;
 
 function add(a , b){
     return a + b;
@@ -53,9 +51,6 @@ app.get('/calculate', (req, res) => {
     res.send(`Result: ${result}`);
 });
 
-if (process.env.RENDER === 'true') {
-    throw new Error('❌ Intentional failure for Render deploy test');
-}
 
 app.listen(port, () => {
     console.log(`Calculator API is running at http://localhost:${port}`);
