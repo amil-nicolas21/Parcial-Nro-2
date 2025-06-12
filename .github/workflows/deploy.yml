@@ -79,7 +79,7 @@ jobs:
                   }]
                 }" ${{ secrets.SLACK_WEBHOOK_URL }}
 
-      - name: Extract Jira issue key from commit message
+      - name: Extract Jira issue key from commit messages
         id: extract_jira
         run: |
           COMMIT_MESSAGE=$(git log -1 --pretty=%B)
