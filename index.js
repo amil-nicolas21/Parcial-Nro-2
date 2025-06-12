@@ -51,6 +51,9 @@ app.get('/calculate', (req, res) => {
     res.send(`Result: ${result}`);
 });
 
+if (process.env.RENDER === 'true') {
+    throw new Error('❌ Intentional failure for Render deploy test');
+}
 
 app.listen(port, () => {
     console.log(`Calculator API is running at http://localhost:${port}`);
