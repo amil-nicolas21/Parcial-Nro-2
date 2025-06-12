@@ -64,25 +64,13 @@ jobs:
                 TEST_RESULT=${{ steps.test_step.outputs.test_result }}
                 QUALITY_GATE_STATUS=${{ steps.quality_gate.outputs.quality_gate_status }}
           
-                STATUS=""
-                COLOR="#2eb886"
-
-                if [ "$TEST_RESULT" -ne 0 ]; then
-                  STATUS="❌ Unit tests failed"
+                if [ "$TEST_RESULT" -eq 0 ] && [ "$QUALITY_GATE_STATUS" = "OK" ]; then
+                  COLOR="#2eb886"
+                  STATUS="✅ Tests Passed"
+                else
+                    if
                   COLOR="#e01e5a"
-                fi
-
-                if [ "$QUALITY_GATE_STATUS" != "OK" ]; then
-                  if [ -n "$STATUS" ]; then
-                  STATUS="$STATUS and SonarCloud Quality Gate failed"
-                  else
-                    STATUS="❌ SonarCloud Quality Gate failed"
-                    COLOR="#e01e5a"
-                  fi
-                fi
-
-                if [ -z "$STATUS" ]; then
-                  STATUS="✅ All checks passed"
+                  STATUS="❌ Tests Failed"
                 fi
                 
                 curl -X POST -H 'Content-type: application/json' --data "{
