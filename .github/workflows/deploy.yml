@@ -119,54 +119,7 @@ jobs:
 
       
 
-      - name: Wait for Render Deployment to Finish
-        id: wait_render
-        run: |
-          SERVICE_ID="srv-d113hjqli9vc738bsmf0"
-          API_KEY="${{ secrets.RENDER_API_KEY }}"
-          SLEEP_TIME=15
-      
-          echo "⏳ Getting latest deployment ID for service $SERVICE_ID..."
-      
-          RESPONSE=$(curl -s -H "Authorization: Bearer $API_KEY" \
-            "https://api.render.com/v1/services/$SERVICE_ID/deploys")
-      
-          DEPLOY_ID=$(echo "$RESPONSE" | jq -r '.[0].deploy.id')
-      
-          if [ -z "$DEPLOY_ID" ] || [ "$DEPLOY_ID" == "null" ]; then
-            echo "❌ Could not extract deployment ID. Check API key or service ID."
-            echo "render_success=false" >> $GITHUB_OUTPUT
-            exit 1
-          fi
-      
-          echo "✅ Found deployment ID: $DEPLOY_ID"
-          echo "⏳ Waiting for deployment to complete..."
-      
-          while true; do
-            STATUS=$(curl -s -H "Authorization: Bearer $API_KEY" \
-              "https://api.render.com/v1/deploys/$DEPLOY_ID" | jq -r 'deploy.status')
-      
-            echo "Deployment status: $STATUS"
-      
-            if [[ "$STATUS" == "live" ]]; then
-              echo "✅ Deployment completed successfully"
-              echo "render_success=true" >> $GITHUB_OUTPUT
-              exit 0
-            elif [[ "$STATUS" == "failed" || "$STATUS" == "cancelled" ]]; then
-              echo "❌ Deployment failed or was cancelled"
-              echo "render_success=false" >> $GITHUB_OUTPUT
-              exit 1
-            fi
-      
-            sleep $SLEEP_TIME
-          done
-
-
-
-
-
       - name: Move Jira task to "Done"
-        if: steps.wait_render.outputs.render_success == 'true'
         run: |
           ISSUE_KEY="${{ needs.build.outputs.issue_key }}"
           echo "Transitioning Jira issue: $ISSUE_KEY"
