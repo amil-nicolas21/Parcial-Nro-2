@@ -68,8 +68,11 @@ jobs:
                   COLOR="#2eb886"
                   STATUS="✅ Tests Passed"
                 else
-                  COLOR="#e01e5a"
-                  STATUS="❌ Tests Failed"
+                    COLOR="#e01e5a"
+                    if [ "$TEST_RESULT" -eq 0 ]; then
+                      STATUS="❌ Tests Failed"
+                    else
+                      STATUS="❌ Sonar Tests Failed"
                 fi
                 
                 curl -X POST -H 'Content-type: application/json' --data "{
