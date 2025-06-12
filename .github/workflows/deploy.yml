@@ -117,16 +117,7 @@ jobs:
         run: |
           curl -X POST https://api.render.com/deploy/srv-d113hjqli9vc738bsmf0?key=dTKMpUYYkPY
 
-      - name: Debug Render API response
-        run: |
-          SERVICE_ID="srv-d113hjqli9vc738bsmf0"
-          API_KEY="${{ secrets.RENDER_API_KEY }}"
-
-          RESPONSE=$(curl -s -H "Authorization: Bearer $API_KEY" \
-            "https://api.render.com/v1/services/$SERVICE_ID/deploys")
-
-          echo "RAW RESPONSE:"
-          echo "$RESPONSE"
+      
 
       - name: Wait for Render Deployment to Finish
         id: wait_render
@@ -140,7 +131,7 @@ jobs:
           RESPONSE=$(curl -s -H "Authorization: Bearer $API_KEY" \
             "https://api.render.com/v1/services/$SERVICE_ID/deploys")
       
-          DEPLOY_ID=$(echo "$RESPONSE" | jq -r '.[0].id')
+          DEPLOY_ID=$(echo "$RESPONSE" | jq -r '.[0].deploy.id')
       
           if [ -z "$DEPLOY_ID" ] || [ "$DEPLOY_ID" == "null" ]; then
             echo "❌ Could not extract deployment ID. Check API key or service ID."
