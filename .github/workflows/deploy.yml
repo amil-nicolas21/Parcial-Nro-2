@@ -117,6 +117,17 @@ jobs:
         run: |
           curl -X POST https://api.render.com/deploy/srv-d113hjqli9vc738bsmf0?key=dTKMpUYYkPY
 
+      - name: Debug Render API response
+        run: |
+          SERVICE_ID="srv-d113hjqli9vc738bsmf0"
+          API_KEY="${{ secrets.RENDER_API_KEY }}"
+
+          RESPONSE=$(curl -s -H "Authorization: Bearer $API_KEY" \
+            "https://api.render.com/v1/services/$SERVICE_ID/deploys")
+
+          echo "RAW RESPONSE:"
+          echo "$RESPONSE"
+
       - name: Wait for Render Deployment to Finish
         id: wait_render
         run: |
