@@ -134,7 +134,7 @@ jobs:
           done
   
           # Si no se detectó un estado final
-          echo "status=$DEPLOY_STATUS" >>$GITHUB_OUTPUT
+          echo "status=$DEPLOY_STATUS" >> $GITHUB_OUTPUT
 
       - name: Move Jira task to "Done"
         run: |
