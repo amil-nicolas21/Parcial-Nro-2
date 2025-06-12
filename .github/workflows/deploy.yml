@@ -66,6 +66,7 @@ jobs:
           
                 if [ "$TEST_RESULT" -eq 0 ] && [ "$QUALITY_GATE_STATUS" = "OK" ]; then
                   COLOR="#2eb886"
+          
                   STATUS="✅ Tests Passed"
                 else
                     if
