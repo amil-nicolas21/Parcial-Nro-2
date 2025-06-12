@@ -69,7 +69,6 @@ jobs:
           
                   STATUS="✅ Tests Passed"
                 else
-                    if
                   COLOR="#e01e5a"
                   STATUS="❌ Tests Failed"
                 fi
