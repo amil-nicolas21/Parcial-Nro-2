@@ -116,14 +116,14 @@ jobs:
         run: |
           curl -X POST https://api.render.com/deploy/srv-d113hjqli9vc738bsmf0?key=dTKMpUYYkPY
 
-      - name: Verificar estado del despliegue en Render (esperando actualización)
+      - name: Check Render status
         id: check_render
         run: |
           for i in {1..10}; do  
           DEPLOY_STATUS=$(curl -s -X GET -H "Authorization: Bearer rnd_f6y5YmAvTmfxDok8RAmr0atsDLPU" \
             https://api.render.com/v1/services/srv-d113hjqli9vc738bsmf0/deploys | jq -r '.[0].deploy.status')
   
-          echo "Intento $i - Estado del despliegue: $DEPLOY_STATUS"
+          echo "Attempting $i - Status: $DEPLOY_STATUS"
           
           if [ "$DEPLOY_STATUS" == "live" ] || [ "$DEPLOY_STATUS" == "update_failed" ]; then
            echo "status=$DEPLOY_STATUS" >> $GITHUB_OUTPUT
@@ -133,8 +133,10 @@ jobs:
           sleep 30
           done
   
-          # Si no se detectó un estado final
           echo "status=$DEPLOY_STATUS" >> $GITHUB_OUTPUT
+      - name: Debug output status
+        run: |
+          echo "Status recibido: '${{ needs.check_render.outputs.status }}'"
 
       - name: Move Jira task to "Done"
         if: needs.check_render.outputs.status == 'live'
