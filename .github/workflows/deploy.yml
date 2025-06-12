@@ -126,20 +126,20 @@ jobs:
           echo "Attempting $i - Status: $DEPLOY_STATUS"
           
           if [ "$DEPLOY_STATUS" == "live" ] || [ "$DEPLOY_STATUS" == "update_failed" ]; then
-           echo "status=$DEPLOY_STATUS" >> $GITHUB_OUTPUT
-           exit 0
+          echo "status=$DEPLOY_STATUS" >> $GITHUB_OUTPUT
+          exit 0
           fi
           
           sleep 30
           done
-  
           echo "status=$DEPLOY_STATUS" >> $GITHUB_OUTPUT
+
       - name: Debug output status
         run: |
           echo "Status recibido: '${{ needs.check_render.outputs.status }}'"
 
       - name: Move Jira task to "Done"
-        if: needs.check_render.outputs.status == 'live'
+        if: ${{ steps.check_render.outputs.status == 'live' }}
         run: |
           ISSUE_KEY="${{ needs.build.outputs.issue_key }}"
           echo "Transitioning Jira issue: $ISSUE_KEY"
