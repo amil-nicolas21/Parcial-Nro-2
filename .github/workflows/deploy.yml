@@ -137,6 +137,7 @@ jobs:
           echo "status=$DEPLOY_STATUS" >> $GITHUB_OUTPUT
 
       - name: Move Jira task to "Done"
+        if: needs.check_render.outputs.status == 'live'
         run: |
           ISSUE_KEY="${{ needs.build.outputs.issue_key }}"
           echo "Transitioning Jira issue: $ISSUE_KEY"
